@@ -57,6 +57,10 @@ function checkUsernameExists(req, res, next) {
       } else {
         next();
       }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Error checking for Username" });
     });
 }
 

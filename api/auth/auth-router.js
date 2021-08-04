@@ -44,10 +44,10 @@ router.post(
 
     const passHash = bcrypt.hashSync(password, 6);
 
-    User.add({ username, password: passHash }).then(({ username }) => {
+    User.add({ username, password: passHash }).then((user) => {
       res.status(201).json({
+        user_id: user.user_id,
         username: username,
-        password: password,
       });
     });
   }
@@ -104,8 +104,6 @@ router.post("/login", checkUsernameExists, (req, res, next) => {
 
 router.get("/logout", (req, res) => {
   if (req.session.user) {
-    const { username } = req.session.user;
-
     req.session.destroy((err) => {
       if (err) {
         res.json({ message: " You are unable to logout at this time" });

@@ -22,7 +22,7 @@ const authRouter = require("./auth/auth-router");
  */
 
 const sessionConfig = {
-  name: "monkey",
+  name: "chocolatechip",
   secret: "keep it secret, keep it safe!",
   cookie: {
     maxAge: 1000 * 60 * 60,
