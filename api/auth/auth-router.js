@@ -45,7 +45,10 @@ router.post(
     const passHash = bcrypt.hashSync(password, 6);
 
     User.add({ username, password: passHash }).then(({ username }) => {
-      res.status(201).json({ message: `Welcome to the party, ${username}!` });
+      res.status(201).json({
+        username: username,
+        password: password,
+      });
     });
   }
 );
@@ -79,7 +82,8 @@ router.post("/login", checkUsernameExists, (req, res, next) => {
       } else {
         res.status(401).json({ message: "Invalid credentials" });
       }
-    });
+    })
+    .catch(next);
 });
 
 /**
