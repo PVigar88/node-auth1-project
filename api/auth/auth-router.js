@@ -66,7 +66,7 @@ router.post("/login", (req, res, next) => {
       if (user && bcrypt.compareSync(password, user.password)) {
         req.session.user = user;
 
-        res.json({ message: `Welcome back, ${username}!` });
+        res.json({ message: `Welcome ${username}!` });
       } else {
         res.status(401).json({ message: "Invalid credentials" });
       }
@@ -97,13 +97,13 @@ router.get("/logout", (req, res) => {
       if (err) {
         res.json({ message: " You are unable to logout at this time" });
       } else {
-        res.json({
-          message: `${username} has been successfully logged out, See you next time!`,
+        res.status(200).json({
+          message: `logged out`,
         });
       }
     });
   } else {
-    res.status(401).json({ message: "failed to logout" });
+    res.status(200).json({ message: "no session" });
   }
 });
 
