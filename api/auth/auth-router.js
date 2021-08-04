@@ -2,7 +2,11 @@
 // middleware functions from `auth-middleware.js`. You will need them here!
 const bcrypt = require("bcrypt");
 
-//NEED TO ADD IN MIDDLEWARES
+const {
+  checkPasswordLength,
+  checkUsernameExists,
+  checkUsernameFree,
+} = require("./auth-middleware");
 
 const router = require("express").Router();
 
@@ -31,15 +35,20 @@ const User = require("../users/users-model.js");
   }
  */
 
-router.post("/register", (req, res, next) => {
-  const { username, password } = req.body;
+router.post(
+  "/register",
+  checkUsernameFree,
+  checkPasswordLength,
+  (req, res, next) => {
+    const { username, password } = req.body;
 
-  const passHash = bcrypt.hashSync(password, 6);
+    const passHash = bcrypt.hashSync(password, 6);
 
-  User.add({ username, password: passHash }).then(({ username }) => {
-    res.status(201).json({ message: `Welcome to the party, ${username}!` });
-  });
-});
+    User.add({ username, password: passHash }).then(({ username }) => {
+      res.status(201).json({ message: `Welcome to the party, ${username}!` });
+    });
+  }
+);
 
 /**
   2 [POST] /api/auth/login { "username": "sue", "password": "1234" }
@@ -57,7 +66,7 @@ router.post("/register", (req, res, next) => {
   }
  */
 
-router.post("/login", (req, res, next) => {
+router.post("/login", checkUsernameExists, (req, res, next) => {
   const { username, password } = req.body;
 
   User.findBy({ username })
